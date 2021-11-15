@@ -1,0 +1,15 @@
+[package]
+authors = ["Sam Grimee <lx2sg@laru.lu>"]
+description = "Nagios plugin to check online status of a BrandMeister repeater."
+edition = "2021"
+name = "check_brandmeister"
+version = "0.1.0"
+
+[dependencies]
+anyhow = "1.0"
+chrono = "0.4.19"
+clap = "3.0.0-beta.5"
+nagiosplugin = "0.4.1"
+reqwest = {version = "0.11", features = ["blocking", "json"]}
+serde = {version = "1.0.130", features = ["derive"]}
+serde_json = "1.0.59"
