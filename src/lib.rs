@@ -14,6 +14,8 @@
 //! sudo mv $HOME/.cargo/bin /usr/lib/nagios/plugins/
 //! ```
 //!
+//! If you do not want to compile, you may find pre-built binaries on the [releases page](https://github.com/sgrimee/check_brandmeister/releases)
+//!
 //! ## Usage
 //!
 //! The check_brandmeister plugin is called by Nagios or LibreNMS but can be tested on the command-line.
