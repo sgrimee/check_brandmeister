@@ -1,8 +1,12 @@
 [package]
 authors = ["Sam Grimee <lx2sg@laru.lu>"]
+categories = ["command-line-utilities"]
 description = "Nagios plugin to check online status of a BrandMeister repeater."
 edition = "2021"
+keywords = ["nagios", "brandmeister", "ham-radio", "amateur-radio"]
+license = "MIT"
 name = "check_brandmeister"
+repository = "https://github.com/sgrimee/check_brandmeister"
 version = "0.1.0"
 
 [dependencies]
