@@ -1,6 +1,6 @@
 // #![warn(missing_docs)]
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result};
 use clap::{crate_authors, crate_description, crate_name, crate_version, App, Arg};
 use nagiosplugin::{Metric, Resource, Runner, ServiceState, TriggerIfValue};
 
@@ -76,12 +76,11 @@ fn get_config() -> Result<Config> {
     })
 }
 
-fn do_check() -> anyhow::Result<Resource> {
+fn do_check() -> anyhow::Result<Resource, anyhow::Error> {
     let config = get_config()?;
     let minutes = last_seen_minutes(config.repeater_id)?;
     let resource = Resource::new(format!("BrandMeister repeater {}", config.repeater_id))
         .with_description("online status")
-        // .with_result(Metric::new("last_seen_min", minutes).with_maximum(15)); // this is buggy, does not trigger
         .with_result(Metric::new("last_seen_min", minutes).with_thresholds(
             config.warn_minutes,
             config.critical_minutes,
@@ -92,9 +91,7 @@ fn do_check() -> anyhow::Result<Resource> {
 
 fn main() {
     Runner::new()
-        .on_error(|e| -> (ServiceState, anyhow::Error) {
-            (ServiceState::Unknown, anyhow!(e.to_string()))
-        })
+        .on_error(|e| (ServiceState::Unknown, e))
         .safe_run(do_check)
         .print_and_exit();
 }
