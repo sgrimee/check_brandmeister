@@ -21,7 +21,7 @@ fn get_bm_repeater_last_update(repeater_id: u32) -> Result<String, anyhow::Error
         .call()?
         .into_json()
         .context("error parsing brandmeister API result, ensure repeater id is valid")?;
-    Ok(String::from(status.last_updated))
+    Ok(status.last_updated)
 }
 
 /// Return the number of seconds since the repeater was seen online on BrandMeister.
