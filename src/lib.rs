@@ -1,6 +1,12 @@
-//! This library verifies the last time a ham-radio repeater was seen on the [BrandMeister] network
-//! using [BrandMeister]'s API returns the time elapsed in seconds
+//! This simple library verifies the last time a ham-radio repeater was seen on the [BrandMeister] network
+//! using [BrandMeister]'s API returns the time elapsed in seconds.
+//! It is not a full client for the brandmeister API.
 //!
+//! See check_brandmeister for a client implementing a [nagios] plugin using this library.
+//!
+//! [BrandMeister]: https://brandmeister.network/
+//! [nagios]: https://nagios-plugins.org/doc/guidelines.html
+
 #![warn(missing_docs)]
 
 use anyhow::{Context, Result};
