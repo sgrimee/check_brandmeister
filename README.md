@@ -7,6 +7,11 @@ It verifies the last time a ham-radio repeater was seen on the [BrandMeister] ne
 using [BrandMeister]'s API and compares the number of minutes elapsed to thresholds
 for Warning or Critical state. Tested with [LibreNMS].
 
+[![Crates.io](https://img.shields.io/crates/v/check_brandmeister.svg)](https://crates.io/crates/check_brandmeister)
+[![GitHub release](https://img.shields.io/github/v/release/sgrimee/check_brandmeister.svg)](https://github.com/sgrimee/check_brandmeister/releases)
+[![Crates.io](https://img.shields.io/crates/l/check_brandmeister.svg)](https://raw.githubusercontent.com/sgrimee/check_brandmeister/master/LICENSE)
+[![Build Status](https://github.com/sgrimee/check_brandmeister/workflows/CI/badge.svg?branch=master)](https://github.com/sgrimee/check_brandmeister/actions?query=branch%3main)
+
 ### Installation
 Build the executable and install it in your nagios plugin folder.
 
