@@ -8,13 +8,14 @@ keywords = ["nagios", "brandmeister", "ham-radio", "amateur-radio"]
 license = "MIT"
 name = "check_brandmeister"
 repository = "https://github.com/sgrimee/check_brandmeister"
-version = "0.2.0"
+documentation = "https://docs.rs/crate/check_brandmeister/latest"
+version = "0.2.2"
 exclude = ["/.github"]
 
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"
-clap = { version = "3.0.0-rc.0", features = ["cargo"] }
+clap = { version = "3.0.0-rc.1", features = ["cargo"] }
 nagiosplugin = "0.5.2"
 serde = { version = "1.0", features = ["derive"] }
 ureq = { version = "2.3", default-features = false, features = ["json"] }
