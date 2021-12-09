@@ -90,7 +90,7 @@ fn get_config() -> Result<Config> {
         )
         .arg(
             arg!(
-                -h --host <hostname> "Ignored, for compatibility with nagios Host"
+                -H --host <hostname> "Ignored, for compatibility with nagios Host"
             )
             .required(false),
         )
