@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0] - 2023-01-03
+
+### Changed
+
+- Add default values for --critical and --warning as advertised in the documentation.
+
+### Fixed
+
+- Use BM API version 2 as version 1 has stopped working.
+- Fix doc test.
+
 ## [0.2.0] - 2021-12-09
 
 This minor release improves command-line argument parsing.

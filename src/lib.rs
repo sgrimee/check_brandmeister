@@ -1,5 +1,5 @@
 //! This simple library verifies the last time a ham-radio repeater was seen on the [BrandMeister] network
-//! using [BrandMeister]'s API returns the time elapsed in seconds.
+//! using [BrandMeister]'s API v2 returns the time elapsed in seconds.
 //! It is not a full client for the brandmeister API.
 //!
 //! See check_brandmeister for a client implementing a [nagios] plugin using this library.
@@ -15,27 +15,24 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 struct RepeaterStatus {
-    last_updated: String,
+    last_seen: String,
 }
 
 fn get_bm_repeater_last_update(repeater_id: u32) -> Result<String, anyhow::Error> {
-    let request_url = format!(
-        "http://api.brandmeister.network/v1.0/repeater/?action=get&q={}",
-        repeater_id
-    );
+    let request_url = format!("https://api.brandmeister.network/v2/device/{}", repeater_id);
     let status: RepeaterStatus = ureq::get(&request_url)
         .call()?
         .into_json()
         .context("error parsing brandmeister API result, ensure repeater id is valid")?;
-    Ok(status.last_updated)
+    Ok(status.last_seen)
 }
 
 /// Return the number of seconds since the repeater was seen online on BrandMeister.
 ///
 /// Example:
 /// ```no_run
-/// use check_brandmeister::last_seen_seconds;
-/// let min :u32 = last_seen_seconds("270107");
+/// use brandmeister::last_seen_seconds;
+/// let seconds :i64 = last_seen_seconds(270107).unwrap();
 /// ```
 pub fn last_seen_seconds(repeater_id: u32) -> Result<i64> {
     let last_update_str = get_bm_repeater_last_update(repeater_id)?;

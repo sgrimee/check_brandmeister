@@ -33,7 +33,7 @@
 //!
 //! OPTIONS:
 //!     -c, --critical <seconds>
-//!             Inactive time in seconds before Critical state [default: 15]
+//!             Inactive time in seconds before Critical state [default: 900]
 //!
 //!     -h, --help
 //!             Print help information
@@ -48,7 +48,7 @@
 //!             Print version information
 //!
 //!     -w, --warning <seconds>
-//!             Inactive time in seconds before Warning state [default: 10]
+//!             Inactive time in seconds before Warning state [default: 600]
 //! ```
 //!
 //! [BrandMeister]: https://brandmeister.network/
@@ -63,6 +63,7 @@ use nagiosplugin::{Metric, Resource, Runner, ServiceState, TriggerIfValue, Unit}
 
 use brandmeister::last_seen_seconds;
 
+#[derive(Debug)]
 struct Config {
     repeater_id: u32,
     warn_seconds: Option<i64>,
@@ -78,6 +79,7 @@ fn get_config() -> Result<Config> {
             arg!(
                 -w --warning <seconds> "Threshold for warning state"
             )
+            .default_value("600")
             .validator(|s| s.parse::<u32>())
             .required(false),
         )
@@ -85,6 +87,7 @@ fn get_config() -> Result<Config> {
             arg!(
                 -c --critical <seconds> "Threshold for critical state"
             )
+            .default_value("900")
             .validator(|s| s.parse::<u32>())
             .required(false),
         )
@@ -105,6 +108,7 @@ fn get_config() -> Result<Config> {
 
 fn do_check() -> anyhow::Result<Resource, anyhow::Error> {
     let config = get_config()?;
+    println!("Config: {:?}", config);
     let seconds = last_seen_seconds(config.repeater_id)?;
     let resource = Resource::new(format!("BrandMeister repeater {}", config.repeater_id))
         .with_description("online status")
