@@ -9,7 +9,7 @@ license = "MIT"
 name = "check_brandmeister"
 repository = "https://github.com/sgrimee/check_brandmeister"
 documentation = "https://docs.rs/crate/check_brandmeister/latest"
-version = "0.2.4"
+version = "0.3.0"
 exclude = ["/.github"]
 
 [dependencies]
