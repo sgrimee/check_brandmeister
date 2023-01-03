@@ -57,70 +57,41 @@
 
 #![warn(missing_docs)]
 
-use anyhow::Result;
-use clap::{app_from_crate, arg};
+// use anyhow::Result;
+use clap::Parser;
 use nagiosplugin::{Metric, Resource, Runner, ServiceState, TriggerIfValue, Unit};
 
 use brandmeister::last_seen_seconds;
 
-#[derive(Debug)]
-struct Config {
-    repeater_id: u32,
-    warn_seconds: Option<i64>,
-    critical_seconds: Option<i64>,
-}
-
-fn get_config() -> Result<Config> {
-    let matches = app_from_crate!()
-        .arg(arg!(
-            -r --repeater <id> "Sets repeater id to check"
-        ))
-        .arg(
-            arg!(
-                -w --warning <seconds> "Threshold for warning state"
-            )
-            .default_value("600")
-            .validator(|s| s.parse::<u32>())
-            .required(false),
-        )
-        .arg(
-            arg!(
-                -c --critical <seconds> "Threshold for critical state"
-            )
-            .default_value("900")
-            .validator(|s| s.parse::<u32>())
-            .required(false),
-        )
-        .arg(
-            arg!(
-                -H --host <hostname> "Ignored, for compatibility with nagios Host"
-            )
-            .required(false),
-        )
-        .get_matches();
-
-    Ok(Config {
-        repeater_id: matches.value_of_t("repeater").expect("required"),
-        warn_seconds: matches.value_of_t("warning").ok(),
-        critical_seconds: matches.value_of_t("critical").ok(),
-    })
+/// Simple program to greet a person
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// ID of the BrandMeister repeater to check
+    #[arg(short, long)]
+    repeater: u32,
+    /// Threshold in seconds for warning state
+    #[arg(short, long, default_value_t = 600)]
+    warning: i64,
+    /// Threshold in seconds for critical state
+    #[arg(short, long, default_value_t = 900)]
+    critical: i64,
+    /// Ignored, for compatibility with nagios host
+    #[arg(short = 'H', long)]
+    host: Option<String>,
 }
 
 fn do_check() -> anyhow::Result<Resource, anyhow::Error> {
-    let config = get_config()?;
-    println!("Config: {:?}", config);
-    let seconds = last_seen_seconds(config.repeater_id)?;
-    let resource = Resource::new(format!("BrandMeister repeater {}", config.repeater_id))
+    let args = Args::parse();
+
+    let seconds = last_seen_seconds(args.repeater)?;
+    let resource = Resource::new(format!("BrandMeister repeater {}", args.repeater))
         .with_description("online status")
         .with_result(
             Metric::new("last_seen", seconds)
                 .with_minimum(0)
                 .with_unit(Unit::Seconds)
-                .with_thresholds(
-                    config.warn_seconds,
-                    config.critical_seconds,
-                    TriggerIfValue::Greater,
-                ),
+                .with_thresholds(args.warning, args.critical, TriggerIfValue::Greater),
         );
     Ok(resource)
 }
