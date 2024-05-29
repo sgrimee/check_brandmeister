@@ -10,7 +10,7 @@
 #![warn(missing_docs)]
 
 use anyhow::{Context, Result};
-use chrono::{TimeZone, Utc};
+use chrono::{NaiveDateTime, TimeZone, Utc};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -36,6 +36,7 @@ fn get_bm_repeater_last_update(repeater_id: u32) -> Result<String, anyhow::Error
 /// ```
 pub fn last_seen_seconds(repeater_id: u32) -> Result<i64> {
     let last_update_str = get_bm_repeater_last_update(repeater_id)?;
-    let last_update = Utc.datetime_from_str(&last_update_str, "%Y-%m-%d %H:%M:%S")?;
+    let naive_last_update = NaiveDateTime::parse_from_str(&last_update_str, "%Y-%m-%d %H:%M:%S")?;
+    let last_update = Utc.from_utc_datetime(&naive_last_update);
     Ok(Utc::now().signed_duration_since(last_update).num_seconds())
 }
